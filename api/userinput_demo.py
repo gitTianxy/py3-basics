@@ -1,10 +1,16 @@
 # encoding=utf-8
 """
 user input demo
---------------------------
+---
+EVENTS
 1. mouse click
 2. key down
 3. accept content
+---
+PLATFORMS
+Linux - Xlib (python-xlib)
+Mac - Quartz, AppKit
+Windows - pywin32, pyHook
 """
 
 import time
@@ -13,7 +19,6 @@ from pymouse import PyMouse
 from pymouse import PyMouseEvent
 from pykeyboard import PyKeyboard
 import pythoncom
-import win32gui
 
 m = PyMouse()
 k = PyKeyboard()
@@ -30,7 +35,7 @@ def click_to_keepscreenalive():
     while True:
         time.sleep(60)
         m_x, m_y = m.position()
-        print 'click (%s, %s)' % (m_x, m_y)
+        print('click (%s, %s)' % (m_x, m_y))
         # m.click(x_dim / 2, y_dim / 2, 1)
         # m.click(x, y)
         m.click(m_x, m_y, 1)
@@ -76,7 +81,7 @@ class ClickFibo(PyMouseEvent):
         '''
         if button == 1:
             if press:
-                print self.fibo.next()
+                print(self.fibo.next())
         else:
             self.stop()
 
@@ -91,21 +96,21 @@ class KeyFilter:
         # create a hook manager
         hm = HookManager()
         # watch for all mouse events
-        hm.KeyDown = self.FilterKeys
+        hm.KeyDown = self.filter_keys
         # set the hook
         hm.HookKeyboard()
         # wait forever
         pythoncom.PumpMessages()
 
-    def FilterKeys(self, event):
-        res = event.Ascii in self.keys
-        print '%s is in %s: %s' % (event.Ascii, self.keys, res)
+    def filter_keys(self, event):
+        res = event.KeyID in self.keys
+        print('%s is in %s: %s' % (event.KeyID, self.keys, res))
         return res
 
 
 def accept_content():
-    input = raw_input('please input:')
-    print 'user input:', input
+    i = input('please input:')
+    print('user input:', i)
 
 
 if __name__ == "__main__":

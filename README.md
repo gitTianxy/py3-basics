@@ -33,7 +33,7 @@ pythonpath.bat project_path somescript.py somecommand
 import sys
 sys.path.append('project_path')
 ```
-## pip升级后出现提示信息
+### pip升级后出现提示信息
 ```
 DEPRECATION: The default format will switch to columns in the future. You can use –format=(legacy|columns) (or define a format=(legacy|columns) in your pip.conf under the [list] section) to disable this warning.
 ```
@@ -43,6 +43,18 @@ DEPRECATION: The default format will switch to columns in the future. You can us
 [list]
 format=columns
 ```
+
+### mouse, keyboard control
+* pywin32
+```sh
+$ pip install pywin32
+$ pip install pypiwin32
+```
+* pyHook
+```sh
+$ pip install pyhook-proper-version.whl
+```
+
 
 ### differences between py2.x & py3.x
 * dict iterate
@@ -83,3 +95,6 @@ finally:
 * list api 4 py3.x
     - map() and filter() return iterators instead of list, use list(...) for transformation.
     - removed builtin `reduce()`, use `functools.reduce()` instead.
+* input
+    - py2.x: raw_input('tips')
+    - py3.x: input('tips')

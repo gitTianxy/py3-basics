@@ -32,8 +32,8 @@ if __name__ == "__main__":
     dir_res = dir_itr(son)
     for k in dir_res:
         v = getattr(son, k)
-        print "%s: %s" % (k, v)
-    print '-----------------------'
+        print("%s: %s" % (k, v))
+    print('-----------------------')
     dict_res = dict_itr(son)
     for k, v in dict_res:
-        print "%s: %s" % (k, v)
+        print("%s: %s" % (k, v))
