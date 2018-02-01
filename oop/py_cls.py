@@ -47,6 +47,7 @@
         2. 动态添加属性(ClsName.new_attr=...即可)
         3. metaclass: 动态改变类的方法
 # 限制实例属性
+    * 通常情况下可以给python类和实例任意拓展/添加属性
     * 通过定义类的__slot__属性,可以限制类的实例属性
     * 注意: __slots__定义的属性仅对当前类实例起作用，对继承的子类是不起作用的
 # 限制属性修改的简化方式
@@ -74,14 +75,14 @@ class Employee:
         Employee.empCount += 1
 
     def __del__(self):
-        print 'method exec when the object on GC'
+        print('method exec when the object on GC')
 
     def displayCount(self):
-        # print "Employee count: %d" % Employee.empCount
-        print "Employee count: %d" % self.__class__.empCount
+        # print("Employee count: %d" % Employee.empCount
+        print("Employee count: %d" % self.__class__.empCount)
 
     def displayEmployee(self):
-        print "Employee: name_", self.name, ", salary_", self.salary
+        print("Employee: name_", self.name, ", salary_", self.salary)
 
     def publicMethod(self):
         pass
@@ -105,16 +106,16 @@ class Parant(object):
         self.__class__.parentAttr = 'parentAttr'
         self.__class__._parentAttr = '_parentAttr'
         self.__class__.__parentAttr = '__parentAttr'
-        print 'call parent constructor'
+        print('call parent constructor')
 
     def parentMethod(self):
-        print 'call public parent method'
+        print('call public parent method')
 
     def _parentMethod(self):
-        print 'call protected parent method'
+        print('call protected parent method')
 
     def __parentMethod(self):
-        print 'call private parent method'
+        print('call private parent method')
 
 
 class Child(Parant):
@@ -125,10 +126,10 @@ class Child(Parant):
 
     def __init__(self):
         super(Child, self).__init__()  # 调用此方法则父类中必须写object
-        print 'call child constructor'
+        print('call child constructor')
 
     def childMethod(self):
-        print 'call child method'
+        print('call child method')
 
 
 class DynamicClsDemo:
@@ -139,7 +140,7 @@ class DynamicClsDemo:
 
     def __init__(self):
         tpc = self.type_cls()
-        print type(tpc)
+        print(type(tpc))
         tp = tpc()
         tp.method_a()
         tp.method_b('B')
@@ -148,9 +149,9 @@ class DynamicClsDemo:
         ml = MyList()
         ml.add('a')
         ml.add('b')
-        print ml
+        print(ml)
         ml.delete('a')
-        print ml
+        print(ml)
 
     def type_cls(self):
         """
@@ -162,10 +163,10 @@ class DynamicClsDemo:
         """
 
         def cls_method_a(self):
-            print 'class method A'
+            print('class method A')
 
         def cls_method_b(self, arg):
-            print 'class method %s' % arg
+            print('class method %s' % arg)
 
         cls_name = 'TypeCls'
         parent_cls = (object,)
@@ -179,8 +180,8 @@ class DynamicClsDemo:
         你可以在创建类的时候做些额外的事情：把这个类注册到某个地方作为记录或者后续的查询，给类注入一些属性，或者干脆替换成另外一个类。
         """
 
-        class MyList(list):
-            __metaclass__ = DynamicClsDemo.MyListMetaCls
+        class MyList(list, metaclass=DynamicClsDemo.MyListMetaCls):
+            pass
 
         return MyList
 
@@ -194,7 +195,7 @@ class DynamicClsDemo:
 class SlotDemo:
     def __init__(self):
         def m_append():
-            print 'append method to instance'
+            print('append method to instance')
 
         def not_allowed():
             raise ValueError('this is not allowed')
@@ -215,9 +216,9 @@ class SetDemo:
 
     def __init__(self):
         student = SetDemo.Student()
-        print 'score', student.score
+        print('score', student.score)
         student.score = 10
-        print 'score', student.score
+        print('score', student.score)
 
     class Student(object):
         def __init__(self):
@@ -255,8 +256,8 @@ class MixInDemo:
                 MixInDemo.Flyable.__init__(self, 'fly')
 
             def display(self):
-                print bird._name
-                print bird._title
+                print(bird._name)
+                print(bird._title)
                 bird.fly()
 
         bird = Bird()
@@ -283,7 +284,7 @@ class MixInDemo:
 
 
 if __name__ == "__main__":
-    print '类基本操作 ------------------'
+    print('类基本操作 ------------------')
     # 创建
     e = Employee('kevin', '11K')
     # 访问方法
@@ -291,41 +292,41 @@ if __name__ == "__main__":
     e.displayEmployee()
     # 访问属性--直接访问+内置函数访问
     e.salary = "14K"
-    print 'salary after reset: ', e.salary
+    print('salary after reset: ', e.salary)
     del Employee.empCount
     try:
-        print 'empCount after delete: ', Employee.empCount
-    except Exception, e:
-        print 'empCount is deleted', e.args
+        print('empCount after delete: ', Employee.empCount)
+    except Exception as ex:
+        print('empCount is deleted', ex.args)
 
     while True:
         if hasattr(e, "name"):
-            print "name: ", getattr(e, "name")
+            print("name: ", getattr(e, "name"))
             setattr(e, "name", "xinyu")
-            print "name after reset: ", getattr(e, "name")
+            print("name after reset: ", getattr(e, "name"))
             delattr(e, "name")
         else:
-            print "name has been deleted"
+            print("name has been deleted")
             break
     # GC
     gc.enable()
     del e
     gc.collect()
 
-    print '类继承------------------'
+    print('类继承------------------')
     c = Child()
     c.parentMethod()
     c._parentMethod()
     c.childMethod()
 
-    print '动态生成类------------------'
+    print('动态生成类------------------')
     DynamicClsDemo()
 
-    print '限制实例属性(属性+方法) ------------------'
+    print('限制实例属性(属性+方法) ------------------')
     SlotDemo()
 
-    print 'get/set simplification ------------------'
+    print('get/set simplification ------------------')
     SetDemo()
 
-    print 'mix inheriatation demo ------------------'
+    print('mix inheriatation demo ------------------')
     MixInDemo()

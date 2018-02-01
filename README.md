@@ -98,3 +98,6 @@ finally:
 * input
     - py2.x: raw_input('tips')
     - py3.x: input('tips')
+* metaclass definition
+    - py2.x: use the `__metaclass__=...` builtin attribute to define the metaclass
+    - py3.x: use `metaclass=...` in the class signature
