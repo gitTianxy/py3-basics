@@ -4,3 +4,4 @@
 /log/
 /conf/db_config_local.py
 /tmp/
+/venv/

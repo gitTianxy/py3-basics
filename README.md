@@ -57,6 +57,9 @@ $ pip install pyhook-proper-version.whl
 
 
 ### differences between py2.x & py3.x
+* string
+    - py2.x: 在Python2中，普通字符串是以8位ASCII码进行存储的
+    - py3.x: 在Python3中，所有的字符串都是以16位unicode字符串存储
 * dict iterate
 ```py
 # py2.x

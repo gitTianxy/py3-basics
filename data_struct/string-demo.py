@@ -3,6 +3,7 @@
 OUTLINE:
 1. basic string operations
 2. number format
+2b. string format
 3. regular expression
 4. string encoding(for python 2.x)
 """
@@ -17,21 +18,21 @@ sql_tpl = '''
     WHERE mac.insert_time>='2017-06-16 00:00:00' AND mac.insert_time<'2017-06-23 00:00:00' AND mac.ekey='av_scan_result'
     AND man.ekey='category' AND man.evalue='adult_video'
     '''
-print sql_tpl
+print(sql_tpl)
 
 # contain substring
-print "'abc' in 'abc def':", 'abc' in 'abc def'
-print ('__init__'.startswith('__'))
-print ('__init__'.endswith('__'))
+print("'abc' in 'abc def':", 'abc' in 'abc def')
+print('__init__'.startswith('__'))
+print('__init__'.endswith('__'))
 
 # substring--string is an array of char
-print 'abc def'[:3]
+print('abc def'[:3])
 
 # replace
-print "replace '1' with 'one' for '12341234':", '12341234'.replace('1', 'one')
+print("replace '1' with 'one' for '12341234':", '12341234'.replace('1', 'one'))
 
 # join
-print "join %s by ',': %s" % (range(0, 5), ','.join([str(i) for i in range(0, 5)]))
+print("join %s by ',': %s" % (range(0, 5), ','.join([str(i) for i in range(0, 5)])))
 
 # ================================================================================================
 """
@@ -40,9 +41,17 @@ II. number format
 import math
 
 # 小数位数控制
-print 'e(3f)={:.3f}, e(6f)={:.6f}'.format(math.e, math.e)
+print('e(3f)={:.3f}, e(6f)={:.6f}'.format(math.e, math.e))
 # 总位数控制
-print '12(3)={:03d}, e(6)={:06.3f}, e(8)={:08.3f}'.format(12, math.e, math.e)
+print('12(3)={:03d}, e(6)={:06.3f}, e(8)={:08.3f}'.format(12, math.e, math.e))
+
+# string format
+in_a = 'hello'
+in_b = 'py3'
+fstr1 = f"{in_a}, {in_b}!"
+fstr2 = "{0}, {1}!".format(in_a, in_b)
+print("format 1:", fstr1)
+print("format 2:", fstr2)
 
 # ================================================================================================
 """
@@ -75,56 +84,51 @@ sql2 = '''
 INSERT INTO `gain_task` (`id`, `user_name`, `fid`, `status`, `create_Time`, `update_Time`, `review_status`) VALUES (1422, 
 'v-yuliu', 5465803, 0, '2017-1-18 10:08:26', '2017-1-18 10:24:52', 300);
 '''
-print '------- regular expression ------'
+print('------- regular expression ------')
 # search
 m_id = re.search(r'\(\d{1,}', sql)
-print 'id:', m_id.group(0).replace('(', '')
+print('id:', m_id.group(0).replace('(', ''))
 m_dy = re.search(r'\'\d{8}\'', sql)
-print 'douya num:', m_dy.group(0).replace(')', '')
+print('douya num:', m_dy.group(0).replace(')', ''))
 
 # sub
 sql = re.sub(r'\(`id`,\s', '(', sql, 1)
 sql = re.sub(r'\(\d{1,},\s', '(', sql, 1)
-print 'sql after truncated:', sql
-print '-----------------------'
+print('sql after truncated:', sql)
+print('-----------------------')
 
 # ================================================================================================
 """
-IV. string encoding(for python 2.x)
-# 关于编码(unicode vs utf8):
-- unicode是给各种不同的符号划分了编码序号范围,比如: 数字0-9占了[30,39]; 英文字符占了[41-7a],中文占了[4E00-9FCB].
-- 而utf-8是基于unicode的一种存储方案, 它是一种变长存储方案: 比如数字/英文通常用一个字节存储, 而中文通常用3个字节存储; 
-可想而知, 在unicode序列中越靠后的字符存储所需的字长越长。
+IV. string encoding(for python 3.x)
+1. 编码
+- py3.x采用unicode编码字符串(py2.x用ascii编码)
 
-字符串在Python内部的表示是unicode编码, 因此，在做编码转换时，通常需要以unicode作为中间编码:
-    即先将其他编码的字符串解码（decode）成unicode，再从unicode编码（encode）成另一种编码。
-
-系统默认编码通常是ascii
-
-str.decode:将其他编码的字符串转换成unicode编码，如str1.decode('gb2312')，表示将gb2312编码的字符串str1转换成unicode编码。
-str.encode:先将str转成unicode编码字符(系统默认操作--用ascii方式解码, 所以当str为非ascii编码字符时,将会报错--
-    除非写成str.decode('src-encode').encode('dest-encode')), 然后将unicode编码字符转换成指定编码的字符串;
-    如str2.encode('gb2312')，表示将unicode编码的字符串str2转换成gb2312编码。
+2. bytes vs bytearray
+- bytes是不可变的，同str;
+- bytearray是可变的，同list。
 """
-tuple1 = (1, '\xe5\x88\x98')
-print tuple1
-# 下面三句话是等价的: 注意它们都不会改变原字符串, 而是在原字符串基础上生成一个新字符串
-print '%s: %s' % (tuple1[0], tuple1[1])
-print '%s: %s' % (tuple1[0], unicode(tuple1[1], encoding='utf8'))
-print '%s: %s' % (tuple1[0], tuple1[1].decode('utf8'))
-
 import sys
 
-print sys.getdefaultencoding()
+print("system default encoding:", sys.getdefaultencoding())
 s = '中文'
-s.decode('utf8').encode('gb18030')
+# str 2 bytes/bytearray: encode(), bytes(), bytearray()
+print("'utf8' bytes of %s: %s" % (s, s.encode('utf8')))
+print("'gb18030' bytes of %s: %s" % (s, s.encode('gb18030')))
+print("'utf8' bytes of %s: %s" % (s, bytes(s, 'utf8')))
+print("'utf8' bytearray of %s: %s" % (s, bytearray(s, 'utf8')))
 
-# 如下代码将报错
-# s.encode('gb18030')
+# bytes/bytearray 2 str: decode(), str()
+print("str of 'utf8' bytes %s: %s" % (s.encode('utf8'), s.encode('utf8').decode('utf8')))
+print("str of 'utf8' bytearray %s: %s" % (bytearray(s, 'utf8'), bytearray(s, 'utf8').decode('utf8')))
+print("str of 'utf8' bytes %s: %s" % (s.encode('utf8'), str(s.encode('utf8'), 'utf8')))
 
-# byte number in a string
-print "bytes of '1234': %s" % len(bytearray("1234"))
-print "bytes of 'hello': %s" % len(bytearray("hello"))
-print "bytes of '你好': %s" % len(bytearray("你好"))
+# byte size of a string
+print("byte size of '%s': %s" % ("1234", len(bytes("1234", "utf8"))))
+print("byte size of '%s': %s" % ("hello", len(bytes("hello", 'utf8'))))
+print("byte size of '%s': %s" % ("你好", len(bytearray("你好", 'utf-8'))))
+
+# bytes vs bytearray
+print("bytes(%s) 2 bytearray:%s" % (bytes(s, 'utf8'), bytearray(bytes(s, 'utf8'))))
+print("bytearray(%s) 2 bytes:%s" % (bytearray(s, 'utf8'), bytes(bytearray(s, 'utf8'))))
 
 # ================================================================================================
