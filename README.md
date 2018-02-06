@@ -3,6 +3,7 @@ this is the project records some common basics of python language and pkgs
 ### topics
 * basic data structures
 * math
+* function
 * thread, threadpool
 * db, dbpool
 * oop & class
@@ -20,6 +21,17 @@ this is the project records some common basics of python language and pkgs
 * tuple
 * dict
 
+### function
+* generator
+    - `yield`关键字
+    - 迭代器
+```
+在 Python 中，使用了 `yield` 的函数被称为生成器（generator）。
+
+跟普通函数不同的是，生成器返回一个'返回迭代器': 在调用生成器运行的过程中，
+每次遇到 yield 时函数会暂停并保存当前所有的运行信息，返回 yield 的值,
+并在下一次执行 next() 方法时从当前位置继续运行。
+```
 
 ## others
 ### sys.path

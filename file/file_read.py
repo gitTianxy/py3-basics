@@ -17,21 +17,23 @@ def load_json(path):
 
 
 def read_excel():
-    path = '../result/file_excel.xls'
+    path = '../data/av_screenshot_src.xlsx'
     workbook = xlrd.open_workbook(path)
     sheet1 = workbook.sheet_by_index(0)
     nrows = sheet1.nrows
     ncols = sheet1.ncols
     # get all cell
-    for rowx in range(0, nrows):
+    for rowx in range(0, 10 if nrows > 10 else nrows):
         for colx in range(0, ncols):
-            print sheet1.cell(rowx, colx).value
+            print("cell(%s,%s):%s" % (rowx, colx, sheet1.cell(rowx, colx).value))
+    print("...")
     # get row
-    for rowx in range(0, nrows):
-        print sheet1.row_values(rowx)
+    for rowx in range(0, 10 if nrows > 10 else nrows):
+        print("row %s: %s" % (rowx, sheet1.row_values(rowx)))
+    print("...")
     # get column
     for colx in range(0, ncols):
-        print sheet1.col_values(colx)
+        print("col %s: %s" % (colx, sheet1.col_values(colx)[0:10]))
 
 
 def read_csv():
@@ -39,7 +41,7 @@ def read_csv():
     with open(path, 'rb') as f:
         rd = csv.reader(f)
         for row in rd:
-            print 'row elements:', row
+            print('row elements:', row)
 
 
 def read(path):
@@ -69,31 +71,43 @@ def read_line_by_line(path):
     """
     由open(path)得到的file对象就是一个line iterator.
     print不换行的小trick:
-        python 2.x: print str,
+        python 2.x: print(str,)
         python 3.x: print(str,end='')
     """
     with open(path) as f:
+        c = 1
         for l in f:
-            print l.rstrip()
-            # print l,
+            if c > 10:
+                break
+            print(l.rstrip())
+            c += 1
+        print("...")
 
 
 if __name__ == '__main__':
     root = "../data/"
     # load json
+    print("---load json")
     data = load_json(root + 'statistic_170616-170623.json')
-    for item in data:
-        print "fid: ", item['fid']
+    for i in range(0, 10 if len(data) > 10 else len(data)):
+        print(data[i])
+    print("...")
     # read excel
+    print("---read excel")
     read_excel()
     # readlines from .txt
+    print("---read lines")
     lines = read_lines(root + "pgc-cid.txt")
-    print lines
-    print '------------------'
-    print read(root + "pgc-cid.txt")
+    print(lines[0:10])
+    print("---read(all)")
+    print(read(root + "pgc-cid.txt"))
     # read line by line: return one line for each call
-    print '--------- read line by line ---------'
+    print('---read line by line')
     read_line_by_line(root + "pgc-cid.txt")
-    print '--------- read by chunk ---------'
-    for chk in read_chunks(root + "pgc-cid.txt"):
-        print chk
+    print('---read by chunk')
+    c = 1
+    for chk in read_chunks(root + "pgc-cid.txt", size=64):
+        if c > 10:
+            break
+        print("chunk %s: %s" % (c, chk))
+        c += 1
