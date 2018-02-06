@@ -1,6 +1,7 @@
 this is the project records some common basics of python language and pkgs
 
 ### topics
+* basic data structures
 * math
 * thread, threadpool
 * db, dbpool
@@ -11,6 +12,14 @@ this is the project records some common basics of python language and pkgs
 * compile/decompile
 * py2.x vs. py3.x
 * others
+
+### basic data structures
+* number
+* string
+* list
+* tuple
+* dict
+
 
 ## others
 ### sys.path
