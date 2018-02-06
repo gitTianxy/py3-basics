@@ -98,6 +98,7 @@ finally:
 * list api 4 py3.x
     - map() and filter() return iterators instead of list, use list(...) for transformation.
     - removed builtin `reduce()`, use `functools.reduce()` instead.
+    - `range(start,stop,step)` returns a 'list generator' instead of a list
 * input
     - py2.x: raw_input('tips')
     - py3.x: input('tips')
