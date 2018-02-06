@@ -5,11 +5,12 @@ OPERATIONS on sequence(list, tuple, dict)
     1. sort
     2. filter
     3. map
-    4. reduce
+    4. reduce: functools.reduce
     5. list-generator
     6. iteration
 """
 import random
+import functools
 
 
 class SortDemo:
@@ -23,32 +24,32 @@ class SortDemo:
     def __init__(self, nums, dicts):
         self.nums = nums
         self.dicts = dicts
-        print 'do sorts --------------'
+        print('do sorts --------------')
         self.sort_nums()
         self.sort_nums_buildin()
         self.sort_dicts()
         self.sort_dicts_buildin()
 
     def sort_nums(self):
-        print 'nums_ori:', self.nums
-        print 'nums_sorted:', sorted(self.nums)
+        print('nums_ori:', self.nums)
+        print('nums_sorted:', sorted(self.nums))
 
     def sort_nums_buildin(self):
-        print 'nums_before_sort: ', self.nums
+        print('nums_before_sort: ', self.nums)
         self.nums.sort(key=lambda n: n)
-        print 'nums_after_sort: ', self.nums
+        print('nums_after_sort: ', self.nums)
 
     def sort_dicts(self):
         def get_val(dic):
-            return dic.values()[0]
+            return list(dic.values())[0]
 
-        print 'dicts_ori:', self.dicts
-        print 'dicts_sorted:', sorted(self.dicts, key=get_val)
+        print('dicts_ori:', self.dicts)
+        print('dicts_sorted:', sorted(self.dicts, key=get_val))
 
     def sort_dicts_buildin(self):
-        print 'dicts_before_sort: ', self.dicts
-        self.dicts.sort(key=lambda d: d.values()[0])
-        print 'dicts_after_sort: ', self.dicts
+        print('dicts_before_sort: ', self.dicts)
+        self.dicts.sort(key=lambda d: list(d.values())[0])
+        print('dicts_after_sort: ', self.dicts)
 
 
 class FilterDemo:
@@ -60,17 +61,17 @@ class FilterDemo:
         self.nums = nums
         self.dicts = dicts
         self.threshold = threshold
-        print 'filter item>%s --------------' % threshold
+        print('filter item>%s --------------' % threshold)
         self.filter_nums()
         self.filter_dicts()
 
     def filter_nums(self):
-        print 'nums_ori:', self.nums
-        print 'nums_filtered:', filter(lambda s: s > self.threshold, self.nums)
+        print('nums_ori:', self.nums)
+        print('nums_filtered:', list(filter(lambda s: s > self.threshold, self.nums)))
 
     def filter_dicts(self):
-        print 'dicts_ori:', self.dicts
-        print 'dicts_filtered:', filter(lambda s: s.values()[0] > self.threshold, self.dicts)
+        print('dicts_ori:', self.dicts)
+        print('dicts_filtered:', list(filter(lambda s: list(s.values())[0] > self.threshold, self.dicts)))
 
 
 class MapDemo:
@@ -82,30 +83,30 @@ class MapDemo:
         self.nums = nums
         self.dicts = dicts
         self.foot = foot
-        print 'item mod %s --------------' % foot
+        print('item mod %s --------------' % foot)
         self.map_nums()
         self.map_dicts()
 
     def map_nums(self):
-        print 'nums_ori:', self.nums
-        print 'nums_mapped:', map(lambda num: num % self.foot, self.nums)
+        print('nums_ori:', self.nums)
+        print('nums_mapped:', list(map(lambda num: num % self.foot, self.nums)))
 
     def map_dicts(self):
-        print 'dicts_ori:', self.dicts
-        print 'dicts_mapped:', map(lambda d: {d.keys()[0]: d.values()[0] % self.foot}, self.dicts)
+        print('dicts_ori:', self.dicts)
+        print('dicts_mapped:', list(map(lambda d: {list(d.keys())[0]: list(d.values())[0] % self.foot}, self.dicts)))
 
 
 class ReduceDemo:
     def __init__(self, nums, dicts):
         self.nums = nums
         self.dicts = dicts
-        print 'reduce --------------'
+        print('reduce --------------')
         self.reduce_nums()
         self.reduce_dicts()
 
     def reduce_nums(self):
-        print 'nums_ori:', self.nums
-        print 'nums_sum:', reduce(lambda s1, s2: s1 + s2, self.nums)
+        print('nums_ori:', self.nums)
+        print('nums_reduced(sum):', functools.reduce(lambda s1, s2: s1 + s2, self.nums))
 
     def reduce_dicts(self):
         """
@@ -115,8 +116,8 @@ class ReduceDemo:
             3. 操作函数输出
         :return:
         """
-        print 'dicts_ori:', self.dicts
-        print 'dicts_reduce:', reduce(lambda s1, s2: s1 + s2, map(lambda d: d.values()[0], self.dicts))
+        print('dicts_ori:', self.dicts)
+        print('dicts_reduced(value-sum):', functools.reduce(lambda s1, s2: s1 + s2, map(lambda d: list(d.values())[0], self.dicts)))
 
 
 class ListGenerator:
@@ -127,9 +128,9 @@ class ListGenerator:
     """
 
     def __init__(self):
-        print 'generate list --------------'
-        self.seeds = range(0, 10)
-        print 'seeds:', self.seeds
+        print('generate list --------------')
+        self.seeds = list(range(0, 10))
+        print('seeds:', self.seeds)
         self.generate_square()
         self.generate_square_with_filter(5)
 
@@ -137,13 +138,13 @@ class ListGenerator:
         def generate_item(s):
             return s * s
 
-        print 'list_gen:', [generate_item(s) for s in self.seeds]
+        print('square_list:', [generate_item(s) for s in self.seeds])
 
     def generate_square_with_filter(self, threshold):
         def generate_item(s):
             return s * s
 
-        print 'list_gen:', [generate_item(s) for s in self.seeds if s > threshold]
+        print('square_list(>%s):%s' % (threshold, [generate_item(s) for s in self.seeds if s > threshold]))
 
 
 class IterateDemo:
@@ -160,36 +161,36 @@ class IterateDemo:
 
     def __init__(self, nums):
         self.nums = nums
-        print 'list iteration --------------'
+        print('list iteration --------------')
         self.itr_by_forloop()
         self.itr_by_listiterator()
         self.itr_over_listgenerator()
 
     def itr_by_forloop(self):
-        print 'iterate by for-loop:'
+        print('iterate by for-loop:')
         for num in self.nums:
-            print ' ', num
+            print(' ', num)
 
     def itr_by_listiterator(self):
-        print 'iterate by list-iterator:'
+        print('iterate by list-iterator:')
         liter = iter(self.nums)
         while True:
             try:
-                print ' ', liter.next()
+                print(' ', next(liter))
             except StopIteration:
                 break
 
     def itr_over_listgenerator(self):
-        print '\niterate over a generator --------------'
+        print('\niterate over a generator --------------')
         list_gen = (num for num in self.nums)
-        print '*** with for-loop(recommended)'
+        print('*** with for-loop(recommended)')
         for num in list_gen:
-            print num
+            print(num)
         list_gen = (num for num in self.nums)
-        print '*** with .next()'
+        print('*** with .next()')
         while True:
             try:
-                print list_gen.next()
+                print(list_gen.__next__())
             except StopIteration:
                 break
 
@@ -207,16 +208,16 @@ class GeneratorDemo:
     """
 
     def __init__(self):
-        print 'generator demos --------------'
-        print '*** num_generator:'
+        print('generator demos --------------')
+        print('*** num_generator:')
         for num in self.num_generator(limit=5):
-            print ' ', num
-        print '*** nums_generator:'
+            print(' ', num)
+        print('*** odd_generator:')
         for odd in self.odd_generator(limit=5):
-            print ' ', odd
-        print '*** fib_generator:'
+            print(' ', odd)
+        print('*** fib_generator:')
         for fib in self.fib_generator(count=10):
-            print ' ', fib
+            print(' ', fib)
 
     def num_generator(self, limit):
         return (num for num in range(0, limit))
@@ -236,25 +237,30 @@ class GeneratorDemo:
 
 class RemoveDemo:
     def __init__(self):
-        print '------------- REMOVE demo ---------------'
+        print('------------- REMOVE demo ---------------')
         self.rm_obj()
         self.rm_by_idx()
 
     def rm_obj(self):
-        '''
+        """
         remove the 1st occurrence
-        '''
-        l1 = range(0, 10)
+        :return:
+        """
+        l1 = list(range(0, 10))
         l1.extend(range(0, 10))
-        print "l1 before remove:", l1
+        print("list ori:", l1)
         for obj in range(0, 10):
             if obj % 2 == 0:
                 l1.remove(obj)
-        print "l1 after remove:", l1
+        print("list removed by obj:", l1)
 
     def rm_by_idx(self):
-        l = range(0, 10)
-        print "list BEFORE remove:", l
+        """
+        remove by idx
+        :return:
+        """
+        l = list(range(0, 10))
+        print("list ori:", l)
         i = 0
         llen = len(l)
         while i < llen:
@@ -263,18 +269,19 @@ class RemoveDemo:
                 llen -= 1
             else:
                 i += 1
-        print "list AFTER remove:", l
+        print("list removed by idx:", l)
 
 
 def range_demo():
     """
-    1. range(start, end, step): 用于返回一个列表
-    1. xrange(start, end, step): 用于遍历
+    range(start, end, step)
     :return:
     """
-    print range(0, 10, 2)
-    for num in xrange(1, 10, 2):
-        print num
+    print("--- range demo ---")
+    rg = range(0, 10, 2)
+    print("type of %s: %s" % (rg, type(rg)))
+    for num in rg:
+        print(num)
 
 
 if __name__ == "__main__":

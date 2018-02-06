@@ -9,6 +9,7 @@ this is the project records some common basics of python language and pkgs
 * exceptions
 * logging
 * compile/decompile
+* py2.x vs. py3.x
 * others
 
 ## others
@@ -56,11 +57,13 @@ $ pip install pyhook-proper-version.whl
 ```
 
 
-### differences between py2.x & py3.x
+## py2.x vs. py3.x
 * string
     - py2.x: 在Python2中，普通字符串是以8位ASCII码进行存储的
     - py3.x: 在Python3中，所有的字符串都是以16位unicode字符串存储
-* dict iterate
+
+### dict relevant api
+* iterate
 ```py
 # py2.x
 for k, v in dict.iteritems():
@@ -70,9 +73,17 @@ for k, v in dict.iteritems():
 for k, v in dict.items():
     pass
 ```
+* `values()` & `keys()`
+```py
+# py2.x: returns a list
+# py3.x: returns a list iterator; use `list(...)` for transformation
+```
+* 'generator' object has no attribute 'next'
+
 * mysql connector
     - py2.x: MySQL-python
     - py3.x: PyMySQL
+
 * try-except
 ```py
 # py2.x
@@ -95,10 +106,51 @@ else:
 finally:
     pass
 ```
-* list api 4 py3.x
-    - map() and filter() return iterators instead of list, use list(...) for transformation.
-    - removed builtin `reduce()`, use `functools.reduce()` instead.
-    - `range(start,stop,step)` returns a 'list generator' instead of a list
+
+### list relevant api
+* map,reduce
+```py
+# py2.x
+# - map(): returns a list
+# - reduce(): returns a list
+
+# py3.x
+# - map(): returns a iterator
+# - reduce(): removed, use `functools.reduce()` instead
+```
+* filter
+```py
+# py2.x: returns a list
+
+# py3.x: returns a iterator, use list(filter(...)) for transformation
+```
+* `range(start,stop,step)`
+```py
+# py2.x
+# - range(): returns a list
+# - xrange(): returns a iterator
+
+# py3.x
+# - range(): returns a iterator
+# - no xrange()
+```
+* iterate
+```py
+# py2.x
+itr2 = iter(l)
+itr2.next()
+
+lgen2 = (...)
+lgen2.next()
+
+# py3.x
+itr3 = iter(l)
+next(itr3)
+
+lgen3 = (...)
+lgen3.__next__()
+```
+
 * input
     - py2.x: raw_input('tips')
     - py3.x: input('tips')
