@@ -33,6 +33,11 @@ this is the project records some common basics of python language and pkgs
 并在下一次执行 next() 方法时从当前位置继续运行。
 ```
 
+### db
+* mysql
+* sqlite
+* sqlalchemy
+
 ## others
 ### sys.path
 * set by command line
