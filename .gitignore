@@ -5,3 +5,5 @@
 /conf/db_config_local.py
 /tmp/
 /venv/
+.DS_Store
+db/*.db
