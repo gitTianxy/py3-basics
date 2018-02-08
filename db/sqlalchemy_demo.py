@@ -2,8 +2,8 @@
 """
 SQLAlchemy: python中最有名的ORM框架
 """
-from sqlalchemy import Column, String, Integer, create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import Column, String, Integer, ForeignKey, create_engine
+from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import exists, update
@@ -25,8 +25,21 @@ class User(Base):
     age = Column(Integer)
     password = Column(String(20), nullable=False, default='1234')
 
+    books = relationship('Book')
+
     def __repr__(self):
-        return f"User({self.name},{self.sex},{self.age},{self.password})"
+        return f"User({self.name},{self.sex},{self.age},{self.password},{self.books})"
+
+
+class Book(Base):
+    __tablename__ = 'book'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(20), nullable=False)
+    uname = Column(String(20), ForeignKey('user.name'))
+
+    def __repr__(self):
+        return f"Book({self.name})"
 
 
 class MysqlDemo:
@@ -67,13 +80,12 @@ class SqliteDemo:
         """
         # 初始化数据库连接:
         self.eg = create_engine('sqlite:///./sqlite_demo.db')
-        if self.eg.dialect.has_table(self.eg, User.__tablename__):
-            self.drop_tbl()
+        self.drop_tbls()
         Base.metadata.create_all(self.eg)
         # 创建DBSession类型:
         self.DBSession = sessionmaker(bind=self.eg)
 
-    def create(self, u):
+    def add_u(self, u):
         print("add", u)
         with closing(self.DBSession()) as s:
             if self.exists(u):
@@ -99,10 +111,13 @@ class SqliteDemo:
             except:
                 raise
 
-    def get_ulist(self, offset=0, limit=5):
-        print(f"get user list. offset={offset}, limit={limit}")
+    def get_ulist(self, order=0, offset=0, limit=5):
+        print(f"get user list. order={'ascend' if order==0 else 'desc'} offset={offset}, limit={limit}")
         with closing(self.DBSession()) as s:
-            return list(s.query(User).offset(offset).limit(limit))
+            if order == 0:
+                return list(s.query(User).order_by(User.age).offset(offset).limit(limit))
+            else:
+                return list(s.query(User).order_by(User.age.desc()).offset(offset).limit(limit))
 
     def update(self, u):
         print("update", u)
@@ -147,8 +162,16 @@ class SqliteDemo:
         with closing(self.DBSession()) as s:
             return s.query(cond).scalar()
 
-    def drop_tbl(self):
-        User.__table__.drop(self.eg)
+    def drop_tbls(self):
+        if self.eg.dialect.has_table(self.eg, Book.__tablename__):
+            Book.__table__.drop(self.eg)
+        if self.eg.dialect.has_table(self.eg, User.__tablename__):
+            User.__table__.drop(self.eg)
+
+    def add_ubooks(self, bks):
+        with closing(self.DBSession()) as s:
+            s.add_all(bks)
+            s.commit()
 
 
 if __name__ == '__main__':
@@ -161,17 +184,25 @@ if __name__ == '__main__':
     print("---sqlite demo")
     sqlite = SqliteDemo()
     kevin = User(name='kevin', sex='male', age=18, password='1234')
-    sqlite.create(kevin)
-    ulist = [
-        User(name='zhang1', sex='male', age=18, password='1234'),
-        User(name='zhang2', sex='female', age=19),
-        User(name='zhang3', sex='female', password='1234'),
+    sqlite.add_u(kevin)
+    bks = [
+        Book(name="kevins's book1", uname="kevin"),
+        Book(name="kevins's book2", uname="kevin"),
+        Book(name="kevins's book3", uname="kevin"),
     ]
-    sqlite.add_ulist(ulist)
+    sqlite.add_ubooks(bks)
     print(sqlite.retrieve('kevin'))
-    sqlite.delete('zhang2')
-    kevin_new = User(name='kevin', sex='male', age=30, password='2018')
-    sqlite.update(kevin_new)
-    print(sqlite.get_ulist())
-    print(sqlite.count('female'))
-    sqlite.exec(sql='select * from user where name=:name', param={'name': 'kevin'})
+    # ulist = [
+    #     User(name='zhang1', sex='male', age=18, password='1234'),
+    #     User(name='zhang2', sex='female', age=19),
+    #     User(name='zhang3', sex='female', password='1234'),
+    # ]
+    # sqlite.add_ulist(ulist)
+    # sqlite.delete('zhang2')
+    # kevin_new = User(name='kevin', sex='male', age=30, password='2018')
+    # sqlite.update(kevin_new)
+    # print(sqlite.get_ulist(order=1))
+    # print(sqlite.count('female'))
+    # sqlite.exec(sql='select * from user where name=:name', param={'name': 'kevin'})
+    # # sqlite.add_ubooks(bks)
+    # print(sqlite.get_ulist())
