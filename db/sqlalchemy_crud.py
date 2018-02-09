@@ -102,7 +102,7 @@ class SqliteDemo:
                 raise
 
     def get_ulist(self, order=0, offset=0, limit=5):
-        print(f"get user list. order={'ascend' if order==0 else 'desc'} offset={offset}, limit={limit}")
+        print(f"get user list. order=age.{'ascend' if order==0 else 'desc'} offset={offset}, limit={limit}")
         with closing(self.DBSession()) as s:
             if order == 0:
                 return list(s.query(User).order_by(User.age).offset(offset).limit(limit))
