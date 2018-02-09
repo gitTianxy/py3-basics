@@ -6,7 +6,7 @@ from sqlalchemy import Column, String, Integer, create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.sql import exists, update
+from sqlalchemy.sql import exists, update, func
 from contextlib import closing
 
 # 创建对象的基类:
@@ -27,6 +27,17 @@ class User(Base):
 
     def __repr__(self):
         return f"User({self.name},{self.sex},{self.age},{self.password})"
+
+
+class Email(Base):
+    __tablename__ = 'email'
+
+    id = Column(Integer, autoincrement=True, primary_key=True)
+    address = Column(String(20), unique=True, nullable=False)
+    uname = Column(String(20), nullable=False)
+
+    def __repr__(self):
+        return f"Email({self.id},{self.address},{self.uname})"
 
 
 class MysqlDemo:
@@ -64,6 +75,7 @@ class SqliteDemo:
     """
     basic 'CRUD' examples of sqlite
     """
+
     def __init__(self):
         """
         init db connection settings
@@ -155,6 +167,57 @@ class SqliteDemo:
     def drop_tbls(self):
         if self.eg.dialect.has_table(self.eg, User.__tablename__):
             User.__table__.drop(self.eg)
+        if self.eg.dialect.has_table(self.eg, Email.__tablename__):
+            Email.__table__.drop(self.eg)
+
+    def add_emails(self, emails):
+        print("add", emails)
+        with closing(self.DBSession()) as s:
+            s.add_all(emails)
+            s.commit()
+
+    def get_user_email(self, name):
+        """
+        INNER JOIN demo
+        ---
+        SELECT User.*,Email.* FROM User INNER JOIN Email ON User.name=Email.uname
+        WHERE User.name='name'
+        """
+        print(f"get user({name}) with email")
+        with closing(self.DBSession()) as s:
+            return s.query(User, Email) \
+                .join(Email, User.name == Email.uname) \
+                .filter(User.name == name) \
+                .first()
+
+    def get_user_emails(self):
+        """
+        LEFT JOIN demo
+        ---
+        SELECT User.*,Email.* FROM User LEFT JOIN Email ON User.name=Email.uname
+        """
+        print("get user-email associations")
+        with closing(self.DBSession()) as s:
+            return s.query(User, Email) \
+                .outerjoin(Email, User.name == Email.uname) \
+                .all()
+
+    def get_user_ecounts(self):
+        """
+        SUB-QUERY demo
+        ---
+        SELECT User.*, ec.count FROM users LEFT OUTER JOIN
+            (SELECT Email.uname, count(*) FROM Email GROUP BY Email.uname) AS ec
+        ON User.name=ec.uname
+        """
+        print(f"get email count for users")
+        with closing(self.DBSession()) as s:
+            ec_stmt = s.query(Email.uname, func.count('*').label('count')) \
+                .group_by(Email.uname) \
+                .subquery()
+            return s.query(User, ec_stmt.c.count) \
+                .outerjoin(ec_stmt, User.name == ec_stmt.c.uname) \
+                .all()
 
 
 if __name__ == '__main__':
@@ -182,3 +245,11 @@ if __name__ == '__main__':
     print(sqlite.count('female'))
     sqlite.exec(sql='select * from user where name=:name', param={'name': 'kevin'})
     print(sqlite.get_ulist())
+    # email
+    print("---join demo")
+    e1 = Email(address='host1@mail.com', uname='kevin')
+    e2 = Email(address='host2@mail.com', uname='kevin')
+    sqlite.add_emails([e1, e2])
+    print(sqlite.get_user_email('kevin'))
+    print(sqlite.get_user_emails())
+    print(sqlite.get_user_ecounts())
