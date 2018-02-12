@@ -5,6 +5,7 @@ CONTENTS:
     2. multiprocess demo
     3. a multiprocess-multithread demo
     4. a processpool-threadpool demo
+    5. remote process demo: refer to 'master_node.py' and 'worker_node.py'
 """
 import multiprocessing
 import os
@@ -12,6 +13,8 @@ import time
 from multiprocessing.pool import ThreadPool
 import threading
 import random
+import queue
+from multiprocessing.managers import BaseManager
 
 
 class ProcessBaseDemo:

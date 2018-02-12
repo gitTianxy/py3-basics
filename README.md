@@ -43,8 +43,7 @@ this is the project records some common basics of python language and pkgs
 一个进程中的任务可以划分成若干子进程来执行(多进程), 也可以划分成若干子线程来执行(多线程).
 
 -- 进程执行
-真正的并行进程只能在多核CPU上实现.
-但是，由于进程数远远多于CPU的核心数，所以操作系统会自动把很多任务轮流调度到每个核心上执行。
+真正的并行进程只能在多核CPU上实现. 但是，由于进程数远远多于CPU的核心数，所以操作系统会自动把很多任务轮流调度到每个核心上执行。
 -- 线程执行
 多线程的执行方式和多进程是一样的, 也是由操作系统在多个线程之间快速切换, 让每个线程都短暂地交替运行.
 
@@ -53,6 +52,24 @@ this is the project records some common basics of python language and pkgs
 多线程程序中，各线程共享所属进程内的各变量.
 
 并发编程的复杂性在于处理进程/线程间的依赖关系, 即需要进程/线程间的通信和协调.
+```
+* 进程优缺点
+```
+# 优点
+多进程模式最大的优点就是稳定性高，因为一个子进程崩溃了，不会影响主进程和其他子进程。（当然主进程挂了所有进程就全挂了，但是Master进程只负责分配任务，挂掉的概率低）著名的Apache最早就是采用多进程模式。
+
+# 缺点
+1. 多进程模式的缺点是创建进程的代价大
+2. 操作系统能同时运行的进程数也是有限的，在内存和CPU的限制下，如果有几千个进程同时运行，操作系统连调度都会成问题。
+```
+* 线程优缺点
+```
+# 优点
+1. 创建代价较小
+2. 多线程模式通常比多进程快一点，但是也快不到哪去
+
+# 缺点
+多线程模式致命的缺点就是任何一个线程挂掉都可能直接造成整个进程崩溃，因为所有线程共享进程的内存。
 ```
 * Python既支持多进程，又支持多线程
 * GIL锁
@@ -71,7 +88,21 @@ Python虽然不能利用多线程实现多核任务，但可以通过多进程�
     2. 多线程模式；
     3. 多进程+多线程模式。
 * multiprocessing
-
+    - process
+    - process pool
+    - thread pool
+* threading
+    - thread
+    - thread lock
+    - thread local
+```
+Python的标准库提供了两个线程控制模块：_thread和threading, _thread是低级模块，threading是高级模块，对_thread进行了封装。
+绝大多数情况下，我们只需要使用threading这个高级模块。
+```
+* threadpool(not recommended)
+* concurrent
+    - threadpool executor
+    - processpool executor
 
 ### db
 * mysql
