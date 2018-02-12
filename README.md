@@ -4,7 +4,7 @@ this is the project records some common basics of python language and pkgs
 * basic data structures
 * math
 * function
-* thread, threadpool
+* process, thread
 * db, dbpool
 * oop & class
 * file
@@ -32,6 +32,46 @@ this is the project records some common basics of python language and pkgs
 每次遇到 yield 时函数会暂停并保存当前所有的运行信息，返回 yield 的值,
 并在下一次执行 next() 方法时从当前位置继续运行。
 ```
+
+### process, thread
+* process vs thread
+```
+对于操作系统来说，一个运行的程序称为一个进程(Process).
+操作系统直接支持的执行单元称为线程(Thread).
+
+由于每个进程至少要干一件事，所以，一个进程至少有一个线程。
+一个进程中的任务可以划分成若干子进程来执行(多进程), 也可以划分成若干子线程来执行(多线程).
+
+-- 进程执行
+真正的并行进程只能在多核CPU上实现.
+但是，由于进程数远远多于CPU的核心数，所以操作系统会自动把很多任务轮流调度到每个核心上执行。
+-- 线程执行
+多线程的执行方式和多进程是一样的, 也是由操作系统在多个线程之间快速切换, 让每个线程都短暂地交替运行.
+
+-- 共享变量
+多进程程序中, 各进程对变量自有一份拷贝存在于每个进程中，互不影响;
+多线程程序中，各线程共享所属进程内的各变量.
+
+并发编程的复杂性在于处理进程/线程间的依赖关系, 即需要进程/线程间的通信和协调.
+```
+* Python既支持多进程，又支持多线程
+* GIL锁
+```
+Python的线程虽然是真正的线程，但解释器执行代码时，有一个GIL锁：Global Interpreter Lock，
+任何Python线程执行前，必须先获得GIL锁，然后，每执行100条字节码，解释器就自动释放GIL锁，让别的线程有机会执行。
+这个GIL全局锁实际上把所有线程的执行代码都给上了锁，所以，多线程在Python中只能交替执行，
+即使100个线程跑在100核CPU上，在任一时刻也只能用到1个核。
+
+GIL是Python解释器设计的历史遗留问题，通常我们用的解释器是官方实现的CPython，要真正利用多核，除非重写一个不带GIL的解释器。
+
+Python虽然不能利用多线程实现多核任务，但可以通过多进程实现多核任务。多个Python进程有各自独立的GIL锁，互不影响。
+```
+* 多任务的实现有3种方式：
+    1. 多进程模式；
+    2. 多线程模式；
+    3. 多进程+多线程模式。
+* multiprocessing
+
 
 ### db
 * mysql
