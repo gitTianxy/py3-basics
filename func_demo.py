@@ -9,6 +9,7 @@ this package exhibits the 'functional programming' with python, which includes:
     6. variadic parameter
 """
 import functools
+from util.pipe import Pipe, force
 
 
 class EmbeddedFuncDemo:
@@ -146,7 +147,7 @@ class VarParaDemo:
         name = 'kevin'
         age = 28
         VarParaDemo.args_func(name, age)
-        VarParaDemo.kwargs_func(name=name, age = age)
+        VarParaDemo.kwargs_func(name=name, age=age)
 
     @staticmethod
     def args_func(*args):
@@ -170,6 +171,54 @@ class VarParaDemo:
             print('%s: %s' % (k, v))
 
 
+class PipelineDemo:
+    def __init__(self):
+        res = self.pip_exec(range(10), [
+            PipelineDemo.even_filter,
+            PipelineDemo.square,
+            PipelineDemo.to_view
+        ])
+        for r in res:
+            print(r)
+
+    @staticmethod
+    def even_filter(nums):
+        return filter(lambda n: n % 2 == 0, nums)
+
+    @staticmethod
+    def square(nums):
+        return map(lambda n: n * n, nums)
+
+    @staticmethod
+    def to_view(nums):
+        return map(lambda n: f"number:{n}", nums)
+
+    def pip_exec(self, data, fns):
+        return functools.reduce(lambda d, f: f(d), fns, data)
+
+
+class ForcePipeDemo:
+    def __init__(self):
+        force(range(10) | even_filter | square | to_view | echo)
+
+@Pipe
+def even_filter(num):
+    return num if num % 2 == 0 else None
+
+@Pipe
+def square(num):
+    return num * num
+
+@Pipe
+def to_view(num):
+    return f"Number:{num}"
+
+@Pipe
+def echo(item):
+    print(item)
+    return item
+
+
 if __name__ == '__main__':
     print('--------- 1. embedded function ---------')
     EmbeddedFuncDemo()
@@ -183,3 +232,7 @@ if __name__ == '__main__':
     LambdaFuncDemo()
     print('--------- 6. variadic parameter demo ---------')
     VarParaDemo()
+    print('--------- 7. pipeline demo ---------')
+    PipelineDemo()
+    print('--------- 8. force demo ---------')
+    ForcePipeDemo()
