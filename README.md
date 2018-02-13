@@ -101,8 +101,19 @@ Python的标准库提供了两个线程控制模块：_thread和threading, _thre
 ```
 * threadpool(not recommended)
 * concurrent
-    - threadpool executor
-    - processpool executor
+```
+executors
+1. threadpool executor
+2. processpool executor
+
+methods
+1. Executor.submit(fn, *args, **kwargs)
+2. Executor.map(func, *iterables, timeout=None)
+3. concurrent.futures.as_completed
+4. future.done()
+5. future.result()
+6. (completed, uncompleted) = concurrent.futures.wait(future_tasks, timeout, return-when)
+```
 
 ### db
 * mysql
