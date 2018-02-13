@@ -157,13 +157,24 @@ class ProcessPoolDemo:
     def __init__(self):
         print('process-pool demo -------------')
         print('Parent process %s.' % os.getpid())
-        p = multiprocessing.Pool()
-        for i in range(10):
-            p.apply_async(long_time_task, args=(i,))
-        print('Waiting for all subprocesses done...')
-        p.close()
-        p.join()
+        print('---sync process')
+        self.sync_work()
+        print('---async process')
+        self.async_work()
         print('All subprocesses done.')
+
+    def async_work(self):
+        pl = multiprocessing.Pool()
+        for i in range(5):
+            pl.apply_async(long_time_task, args=(i,))
+        pl.close()
+        pl.join()
+        print('async processes done')
+
+    def sync_work(self):
+        with multiprocessing.Pool() as pl:
+            pl.map(long_time_task, range(5))
+        print('sync processes done')
 
 
 def long_time_task(name):
