@@ -27,11 +27,46 @@ def is_prime(n):
     return True
 
 
-def main():
+def square(o):
+    global objs
+
+    print("do square", o['in'])
+    o['out'] = o['in'] ** 2
+    for obj in objs:
+        if obj['in'] == o['in']:
+            print(" %s equals %s" % (obj['in'], o['in']))
+            obj['out'] = o['out']
+            break
+
+
+def prime_task():
+    print('---prime task')
     with ProcessPoolExecutor() as executor:
         for number, prime in zip(PRIMES, executor.map(is_prime, PRIMES)):
             print('%d is prime: %s' % (number, prime))
 
 
+def square_task():
+    global objs
+    """
+    input data cannot be written in processes, or changes in process is unreadable outside
+    """
+    print("---square task")
+    res = None
+    with ProcessPoolExecutor() as executor:
+        executor.map(square, objs)
+        # res = zip(map(lambda o: o['input'], objs), executor.map(square, objs))
+    print("square finish")
+    for o in objs:
+        print(f"input:{o.get('in')}, output:{o.get('out')}")
+    # for inv, outv in res:
+    #     print(f"input:{inv}, output:{outv}")
+
+
+objs = [{
+    'in': i
+} for i in range(5)]
 if __name__ == '__main__':
-    main()
+    # prime_task()
+    square_task()
+    print("***all finish")

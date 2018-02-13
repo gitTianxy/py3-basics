@@ -11,6 +11,7 @@ import multiprocessing
 import os
 import time
 from multiprocessing.pool import ThreadPool
+from multiprocessing import Pool
 import threading
 import random
 import queue
@@ -164,7 +165,7 @@ class ProcessPoolDemo:
         print('All subprocesses done.')
 
     def async_work(self):
-        pl = multiprocessing.Pool()
+        pl = Pool()
         for i in range(5):
             pl.apply_async(long_time_task, args=(i,))
         pl.close()
@@ -172,8 +173,22 @@ class ProcessPoolDemo:
         print('async processes done')
 
     def sync_work(self):
-        with multiprocessing.Pool() as pl:
-            pl.map(long_time_task, range(5))
+        """
+        VERSION difference:
+        In Python 2.x and 3.0, 3.1 and 3.2, multiprocessing.Pool() objects are not context managers.
+         You cannot use them in a `with` statement.
+         Only in Python 3.3 and up can you use them as such;
+         with `__enter__()` returns the pool object,
+         and `__exit__()` calls terminate().
+        :return:
+        """
+        # py2.x
+        # pl = Pool()
+        # pl.map(long_time_task, range(10))
+        # pl.close()
+        # py3.x
+        with Pool() as pl:
+            pl.map(long_time_task, range(10))
         print('sync processes done')
 
 
