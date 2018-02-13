@@ -166,6 +166,9 @@ $ pip install pyhook-proper-version.whl
 
 
 ## py2.x vs. py3.x
+* int
+    - py2.x: int, long
+    - py3.x: int(Python3 整型是没有限制大小的)
 * string
     - py2.x: 在Python2中，普通字符串是以8位ASCII码进行存储的
     - py3.x: 在Python3中，所有的字符串都是以16位unicode字符串存储

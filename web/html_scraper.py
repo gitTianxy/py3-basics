@@ -25,7 +25,7 @@ def retrieve_dom(html_str, dom_selector):
 
 
 def get_baidulinks(url):
-    print '\nwww.baidu.com ----------------'
+    print('\nwww.baidu.com ----------------')
     html_str = read_html(url)
     links = []
     for a in retrieve_dom(html_str, 'div#u1 a'):
@@ -34,7 +34,7 @@ def get_baidulinks(url):
 
 
 def get_pyvideos(url):
-    print '\npyvideo/scipy-2017 ----------------'
+    print('\npyvideo/scipy-2017 ----------------')
     html_str = read_html(url)
     article_selector = 'div.container div.content-list article'
     articles = retrieve_dom(html_str, article_selector)
@@ -50,7 +50,7 @@ def get_pyvideos(url):
 
 
 def youtube_videos():
-    print '\nwww.youtube.com ----------------'
+    print('\nwww.youtube.com ----------------')
     html = read_html_withproxy('https://www.youtube.com/')
     sections = []
     section_selector = 'div#feed-main-what_to_watch ol.item-section'
@@ -75,11 +75,11 @@ def youtube_videos():
 if __name__ == "__main__":
     links = get_baidulinks('https://www.baidu.com')
     for l in links:
-        print l
+        print(l)
 
     videos = get_pyvideos('http://pyvideo.org/events/scipy-2017.html')
     for v in videos:
-        print v
+        print(v)
     sections = youtube_videos()
     for s in sections:
-        print s
+        print(s)

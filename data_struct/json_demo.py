@@ -55,47 +55,47 @@ jfile = '../data/fileinfo_{fid}.json'
 
 
 def parse_str():
-    print '---parse json str to dict'
+    print('---parse json str to dict')
     fdeadline = datetime.datetime.strptime('2016-06-01', '%Y-%m-%d')
     res = json.loads(jstr)
     if res['err'] != 0:
-        print 'err happens'
+        print('err happens')
         return
     finfo = res['data']
     fid = finfo['fid']
     last_update_time = datetime.datetime.fromtimestamp(finfo['last_update_time']/1000)
-    fromcps = finfo['filecps'].values()
-    print 'fid:', fid
-    print "last_update_time(%s) before deadline(%s): %s" % (last_update_time, fdeadline, (last_update_time < fdeadline))
-    print "fromcp is 'private_cloud':", (len(fromcps) == 1 and fromcps[0]['fromcp'] == 'private_cloud')
+    fromcps = list(finfo['filecps'].values())
+    print('fid:', fid)
+    print("last_update_time(%s) before deadline(%s): %s" % (last_update_time, fdeadline, (last_update_time < fdeadline)))
+    print("fromcp is 'private_cloud':", (len(fromcps) == 1 and fromcps[0]['fromcp'] == 'private_cloud'))
     return finfo
 
 
 def load_file(jpath):
-    print '---load json file'
+    print('---load json file')
     with open(jpath) as f:
-        print 'json file content:', json.load(f)
+        print('json file content:', json.load(f))
 
 
 def dict_2_jstr(obj):
     '''
     json.dumps(obj)
     '''
-    print '---convert dict 2 json str'
-    print json.dumps(obj)
+    print('---convert dict 2 json str')
+    print(json.dumps(obj))
 
 
 def dict_2_jsonf(obj, fpath):
     '''
     json.dump(obj,file)
     '''
-    print '---write dict 2 json file'
+    print('---write dict 2 json file')
     with open(fpath, 'w') as f:
         json.dump(obj, f)
 
 
 def read_json_by_http(fid):
-    print '---read json from http request'
+    print('---read json from http request')
     res = None
     try:
         url = 'http://ppc.pptvyun.com/fsvc/private/3/file/{fid}'.replace('{fid}', str(fid))
@@ -103,7 +103,7 @@ def read_json_by_http(fid):
             'Accept': 'application/json'
         })
         if res.status_code == requests.codes.ok:
-            print json.loads(res.text)['data']
+            print(json.loads(res.text)['data'])
         else:
             raise RuntimeError(
                 "get fileinfo err. fid:%s, status:%s, reason:%s" % (fid, res.status_code, res.reason))

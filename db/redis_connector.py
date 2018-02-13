@@ -19,4 +19,4 @@ if __name__ == "__main__":
     pipe = conn.pipeline()
     pipe.hget("htian", "age")
     result = pipe.execute()
-    print result
+    print(result)

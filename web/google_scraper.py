@@ -27,10 +27,10 @@ def get_link_content(link):
         "http": "http://localhost:1080",
         "https": "http://localhost:1080",
     }
-    print '*** query:', link
+    print('*** query:', link)
     r = requests.get(link, proxies=proxies)
     if r.status_code != 200:
-        print 'status: %s, reason: %s' % (r.status_code, r.reason)
+        print('status: %s, reason: %s' % (r.status_code, r.reason))
         return None
     return r.content
 
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     key_words = 'python google links'
     for page in range(1, 5):
         html = google(query=key_words, page=page)
-        print '--------------------------'
+        print('--------------------------')
         links = pickout_links(html)
         for l in links:
             c = get_link_content(l)
@@ -96,5 +96,5 @@ if __name__ == '__main__':
                 continue
             results.append(retrieve_data_with_lib(c, l))
     # display
-    print '======== RESULT ======='
+    print('======== RESULT =======')
     pprint(results, indent=4)
