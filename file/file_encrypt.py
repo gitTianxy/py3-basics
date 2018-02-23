@@ -21,5 +21,5 @@ def calc_MD5(filepath):
 
 if __name__ == "__main__":
     file_path = "/Users/kevin/Workspace/python/pptv/GZTV_512000_20171125_26723853_0.mp4"
-    print calc_MD5(file_path)
-    print calc_Sha1(file_path)
+    print(calc_MD5(file_path))
+    print(calc_Sha1(file_path))
