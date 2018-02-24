@@ -9,6 +9,7 @@ this is the project records some common basics of python language and pkgs
 * oop
 * file
 * exceptions
+* time
 * logging
 * compile/decompile
 * py2.x vs. py3.x
@@ -132,6 +133,10 @@ methods
     - `BytesIO`
 
 ### exceptions
+
+### time
+* time
+* datetime
 
 ### logging
 

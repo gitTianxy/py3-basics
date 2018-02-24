@@ -1,5 +1,15 @@
-# coding=utf-8
-# __author__='kevintian'
+# coding=utf8
+"""
+loops:
+1. for-loop
+2. while-loop
+
+iterators:
+1. self-defined iterator
+2. self-defined list
+3. itertools demo
+"""
+import itertools
 
 # for-loop
 print('FOR-LOOP')
@@ -25,6 +35,7 @@ class SelfItr:
     1. __iter__(): returns the iterable object
     2. __next__(): return next iteration value, or raise StopIteration if meeting the stop condition
     """
+
     def __init__(self, loop_num):
         self.loop_num = loop_num
         self.tmp = 0
@@ -60,6 +71,62 @@ class SelfList:
             raise TypeError(f'input type error. val:{n}')
 
 
+class ItertoolsDemo:
+    def __init__(self):
+        print("---demos for 'itertools'")
+        self.infinite_itrs(10)
+        self.finite_itrs(5)
+        self.chain('abc', 'def')
+        self.groupby('AAABBBCCAAA')
+
+    def infinite_itrs(self, limit):
+        counts = []
+        for i in itertools.count(0, 2):
+            if i > limit:
+                break
+            counts.append(str(i))
+        counts.append('...')
+        print("infinite counts:", counts)
+
+        repeats = []
+        for i in itertools.repeat('a'):
+            if len(repeats) > limit:
+                break
+            repeats.append(i)
+        repeats.append('...')
+        print("infinite repeats:", repeats)
+
+        cycles = []
+        for i in itertools.cycle('abc'):
+            if len(cycles) > limit:
+                break
+            cycles.append(i)
+        cycles.append('...')
+        print("infinite cycles:", cycles)
+
+    def finite_itrs(self, limit):
+        counts = list(itertools.takewhile(lambda i: i < limit, itertools.count(0, 2)))
+        print("finite counts:", counts)
+
+        repeats = list(itertools.repeat('a', limit))
+        print("finite repeats:", repeats)
+
+        cycles = []
+        for i in itertools.cycle('abc'):
+            if len(cycles) >= limit:
+                break
+            cycles.append(i)
+        print("finite cycles:", cycles)
+
+    def chain(self, c1, c2):
+        print(f"chain {c1} and {c2} together: {list(itertools.chain(c1, c2))}")
+
+    def groupby(self, content):
+        print(f"group {content} by adjacent keys:")
+        for k, gp in itertools.groupby(content):
+            print(f"{k}: {list(gp)}")
+
+
 if __name__ == '__main__':
     print("---self defined 'iterator'")
     for num in SelfItr(10):
@@ -70,3 +137,4 @@ if __name__ == '__main__':
         print(item)
     print("item %s in list: %s" % (5, sl[5]))
     print("items range between %s to %s: %s" % (1, 5, sl[1:5]))
+    ItertoolsDemo()

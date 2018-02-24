@@ -106,6 +106,10 @@ IV. string encoding(for python 3.x)
 2. bytes vs bytearray
 - bytes是不可变的，同str;
 - bytearray是可变的，同list。
+
+3. chardet
+- 用chardet检测编码，使用简单。获取到编码后，再转换为str，就可以方便后续处理。
+- chardet支持检测中文、日文、韩文等多种语言。
 """
 import sys
 
@@ -130,5 +134,16 @@ print("byte size of '%s': %s" % ("你好", len(bytearray("你好", 'utf-8'))))
 # bytes vs bytearray
 print("bytes(%s) 2 bytearray:%s" % (bytes(s, 'utf8'), bytearray(bytes(s, 'utf8'))))
 print("bytearray(%s) 2 bytes:%s" % (bytearray(s, 'utf8'), bytes(bytearray(s, 'utf8'))))
+
+# encoding detect: chardet
+import chardet
+cdres = chardet.detect(b'Hello, world!')
+print(cdres)
+cdres = chardet.detect('Hello, world!'.encode('utf8'))
+print(cdres)
+cdres = chardet.detect('你好!'.encode('gbk'))
+print(cdres)
+cdres = chardet.detect('你好!'.encode('utf8'))
+print(cdres)
 
 # ================================================================================================
