@@ -195,46 +195,6 @@ class IterateDemo:
                 break
 
 
-class GeneratorDemo:
-    """
-    two ways to define a generator:
-        1. generator-expression: (...)
-        2. function-with-yield
-    NOTE:
-        1. generator是'惰性的'--只有在调用next()方法时才生成下一个元素; 这样的好处是, 我们不需要存储空间就可以拥有一个很大的序列
-        2. 虽然generator以函数的形式定义, 但是generator和函数的执行流程不一样:
-            a. 函数是顺序执行，遇到return语句或者最后一行函数语句就返回;
-            b. generator函数在每次调用next()的时候执行，遇到yield语句返回，再次执行时从上次返回的yield语句处继续执行。
-    """
-
-    def __init__(self):
-        print('generator demos --------------')
-        print('*** num_generator:')
-        for num in self.num_generator(limit=5):
-            print(' ', num)
-        print('*** odd_generator:')
-        for odd in self.odd_generator(limit=5):
-            print(' ', odd)
-        print('*** fib_generator:')
-        for fib in self.fib_generator(count=10):
-            print(' ', fib)
-
-    def num_generator(self, limit):
-        return (num for num in range(0, limit))
-
-    def odd_generator(self, limit):
-        for num in range(0, limit):
-            if num % 2 == 1:
-                yield num
-
-    def fib_generator(self, count):
-        idx, a, b = 0, 0, 1
-        while idx < count:
-            yield a
-            a, b = b, a + b
-            idx += 1
-
-
 class RemoveDemo:
     def __init__(self):
         print('------------- REMOVE demo ---------------')
@@ -299,6 +259,5 @@ if __name__ == "__main__":
     ReduceDemo(num_list, dict_list)
     ListGenerator()
     IterateDemo(num_list)
-    GeneratorDemo()
     RemoveDemo()
     range_demo()

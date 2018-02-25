@@ -6,6 +6,7 @@ collections是Python内建的一个集合模块，提供了许多有用的集合
 3a. defaultdict
 3b. ordereddict
 4. counter
+5. iterator/iterable
 """
 from collections import *
 
@@ -64,8 +65,27 @@ def ordereddictdemo():
     print(od)
 
 
+def iterdemo():
+    """
+    Iterable:
+        An iterable is an object that you can get an iterator from, either by `__iter__` or `__getitem__` method.
+    Iterator:
+        An iterator is an object with a `next` (Python 2) or `__next__` (Python 3) method.
+
+    iterator is iterable.
+    """
+    print("---iterator/iterable demo")
+    r = range(5)
+    print(f"{r} is a 'iterator': {isinstance(r, Iterator)}")
+    print(f"{r} is 'iterable': {isinstance(r, Iterable)}")
+    itr = iter(r)
+    print(f"{itr} is a 'iterator': {isinstance(itr, Iterator)}")
+    print(f"{itr} is 'iterable': {isinstance(itr, Iterable)}")
+
+
 if __name__ == '__main__':
     namedtupledemo()
     dequedemo()
     defaultdictdemo()
     ordereddictdemo()
+    iterdemo()

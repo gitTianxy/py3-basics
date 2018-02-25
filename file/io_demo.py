@@ -10,6 +10,10 @@ I. io模块的3种I/O
 
 II. thread-safe
 
+III. CPU高速 vs IO设备的龟速
+解决CPU高速执行能力和IO设备的龟速严重不匹配, 有多种不同的方案:
+1. 并发(多进程/多线程): 同时处理多个(同步)io操作
+2. 异步io: 当代码需要执行一个耗时的IO操作时，它只发出IO指令，并不等待IO结果，然后就去执行其他代码;当IO返回结果时，再通知CPU进行处理。
 """
 from io import StringIO
 from io import BytesIO
