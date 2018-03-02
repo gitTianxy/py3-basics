@@ -11,6 +11,8 @@ OPERATIONS on sequence(list, tuple, dict)
 """
 import random
 import functools
+import copy
+import bisect
 
 
 class SortDemo:
@@ -244,6 +246,42 @@ def range_demo():
         print(num)
 
 
+class BisectDemo:
+    """
+    bisect API: 用'二分法'在序列中查找插入位置, 或插入数值.
+    ---
+    1. bisect.bisect(list, num): find insert position of 'num' in 'list', right-most if exists
+       bisect.bisect_left(list, num): find insert position of 'num' in 'list', left-most if exists
+       bisect.bisect_right(list, num): find insert position of 'num' in 'list', right-most if exists
+    2. bisect.insort(list, num): insert 'num' into list at a right-most position
+       bisect.insort_left(list, num): insert 'num' into list at a left-most position
+       bisect.insort_right(list, num): insert 'num' into list at a right-most position
+    ---
+    note: 使用这个模块的函数前先确保操作的列表是已排序的。
+    """
+    def __init__(self):
+        self.l = [4, 2, 9, 7, 0, 1]
+        self.l.sort()
+        self.insert_2_idx(1)
+        self.find_idx(1)
+
+    def insert_2_idx(self, num):
+        l1 = copy.copy(self.l)
+        bisect.insort(l1, num)
+        l2 = copy.copy(self.l)
+        bisect.insort_left(l2, num)
+        l3 = copy.copy(self.l)
+        bisect.insort_right(l3, num)
+        print(f"bisect {num} into {self.l}: {l1}")
+        print(f"bisect_left {num} into {self.l}: {l2}")
+        print(f"bisect_right {num} into {self.l}: {l3}")
+
+    def find_idx(self, num):
+        print(f"postion of {num} in {self.l}: {bisect.bisect(self.l, num)}")
+        print(f"postion_left of {num} in {self.l}: {bisect.bisect_left(self.l, num)}")
+        print(f"postion_right of {num} in {self.l}: {bisect.bisect_right(self.l, num)}")
+
+
 if __name__ == "__main__":
     # prepare data
     num_list = []
@@ -261,3 +299,5 @@ if __name__ == "__main__":
     IterateDemo(num_list)
     RemoveDemo()
     range_demo()
+
+    BisectDemo()

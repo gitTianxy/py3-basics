@@ -24,24 +24,24 @@ class SeriesDemo:
     def __init__(self):
         data_list = ['ele_%s' % i for i in range(0, 5)]
         series_by_list = self.construct_by_list(data=data_list)
-        print series_by_list
+        print(series_by_list)
         index = ['idx_%s' % i for i in range(0, 5)]
         series_by_list_withidx = self.construct_by_list(data=data_list, index=index)
-        print series_by_list_withidx
-        print '---------------------'
+        print(series_by_list_withidx)
+        print('---------------------')
         data_dict = {}
         for i in range(0, 5):
             data_dict['idx_%s' % i] = 'ele_%s' % i
         series_by_dict = self.construct_by_dict(data=data_dict)
-        print series_by_dict
+        print(series_by_dict)
         specify_idx = ['idx_%s' % i for i in range(3, 8)]
         series_specify = self.construct_by_dict(data=data_dict, index=specify_idx)
-        print series_specify
+        print(series_specify)
         series_append = series_by_dict.append(series_specify)
-        print series_append
+        print(series_append)
         series_not_null = series_append[series_append.notnull()]
-        print series_not_null
-        print 'series_not_null[%s] = %s' % ('idx_1', self.get_by_index(series_not_null, 'idx_1'))
+        print(series_not_null)
+        print('series_not_null[%s] = %s' % ('idx_1', self.get_by_index(series_not_null, 'idx_1')))
 
     def construct_by_list(self, **kwargs):
         data = kwargs.get('data')
@@ -173,8 +173,8 @@ class DataFrameDemo:
 def disp_obj(obj, **kwargs):
     msg = kwargs.get('msg')
     if msg is not None:
-        print '\n***', msg
-    print obj
+        print('\n***', msg)
+    print(obj)
 
 
 if __name__ == '__main__':

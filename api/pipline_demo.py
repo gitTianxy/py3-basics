@@ -35,14 +35,14 @@ class RedisPipeline:
         for k in h_keys:
             pipe.hget(h_name, k)
         r1 = pipe.execute()
-        print r1
-        print 'sleep for 20 secs'
+        print(r1)
+        print('sleep for 20 secs')
         sleep(20)
         h_keys = conn.hkeys(h_name)
         for k in h_keys:
             pipe.hget(h_name, k)
         r2 = pipe.execute()
-        print r2
+        print(r2)
 
 
 import shutil
@@ -151,9 +151,9 @@ class SklearnPipeline:
 
 
 def print_title(title):
-    print '--------------- %s -----------------' % title
+    print('--------------- %s -----------------' % title)
 
 
 if __name__ == "__main__":
-    # RedisPipeline()
+    RedisPipeline()
     SklearnPipeline()

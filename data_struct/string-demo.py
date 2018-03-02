@@ -4,6 +4,7 @@ OUTLINE:
 1. basic string operations
 2. number format
 2b. string format
+2c. struct demo
 3. regular expression
 4. string encoding(for python 2.x)
 """
@@ -37,8 +38,19 @@ print("join %s by ',': %s" % (range(0, 5), ','.join([str(i) for i in range(0, 5)
 # ================================================================================================
 """
 II. number format
+---
+struct API: 实现数字和bytes之间的相互转换
+1. struct.pack(fmt, v1, v2, ...): 按照给定的格式(fmt)，把数据封装成字符串(实际上是类似于c结构体的字节流)
+2. struct.unpack(fmt, string): 按照给定的格式(fmt)解析字节流string，返回解析出来的tuple
+3. struct.calcsize(fmt): 计算给定的格式(fmt)占用多少字节的内存
+`fmt` symbols:
+    - i: integer
+    - f/d: float/double
+    - s: string
+    - ?: bool
 """
 import math
+import struct
 
 # 小数位数控制
 print('e(3f)={:.3f}, e(6f)={:.6f}'.format(math.e, math.e))
@@ -52,6 +64,16 @@ fstr1 = f"{in_a}, {in_b}!"
 fstr2 = "{0}, {1}!".format(in_a, in_b)
 print("format 1:", fstr1)
 print("format 2:", fstr2)
+
+# struct demo
+f = 0.5
+i = 1
+
+b = struct.pack('fi', f, i)
+print(f"convert '{f}','{i}' to bytes: {b}")
+
+res, res2 = struct.unpack('fi', b)
+print(f"parse '{b}' to num: ({res},{res2})")
 
 # ================================================================================================
 """
