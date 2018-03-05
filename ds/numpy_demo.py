@@ -16,7 +16,14 @@ def print_version():
 
 def array_operate():
     """
-    array operations: create, transform, copy, generate(sequence, random, repeat)
+    array operations:
+        create,
+        transform,
+        copy,
+        generate(sequence, random, repeat),
+        where,
+        concat,
+        stack
     ---
     Tips:
     1. `np.random.RandomState` or `np.random.seed`: If you want to repeat the same set of
@@ -60,10 +67,27 @@ def array_operate():
     print("Pick 10 items from a given list with a predefined probability 'p':",
           np.random.choice(['a', 'e', 'i', 'o', 'u'], size=10, p=[0.3, .1, 0.1, 0.4, 0.1]))
 
-    # repeat
+    # repetition
     a = np.arange(5)
     print("Repeat whole of 'a' two times:", np.tile(a, 2))
     print("Repeat each element of 'a' two times:", np.repeat(a, 2))
+
+    # np.where(condition,x,y)
+    aw = np.random.randint(0, 10, size=10)
+    bw = np.random.randint(0, 10, size=10)
+    print(f"{aw}>{bw}:{np.where(aw>bw, aw, bw)}")
+
+    # concatenate(array_tuple, axis=0/1)
+    ac = np.arange(0, 8).reshape(2, 4)
+    bc = np.arange(10, 18).reshape(2, 4)
+    print(f"concat {ac} and {bc} vertically: {np.concatenate((ac, bc), axis=0)}")
+    print(f"concat {ac} and {bc} horizontally: {np.concatenate((ac, bc), axis=1)}")
+
+    # vstack/hstack
+    va = np.arange(5)
+    vb = np.arange(5)
+    print(f"stack {va} and {vb} horizontally: {np.hstack((va, vb))}")
+    print(f"stack {va} and {vb} vertically: {np.vstack((va, vb))}")
 
 
 def array_prop():
@@ -135,6 +159,3 @@ if __name__ == '__main__':
     array_prop()
     array_elements()
     array_analysis()
-    a = np.arange(10).reshape(2, -1)
-    b = np.repeat(1, 10).reshape(2, -1)
-    print(np.hstack((a,b)))
