@@ -129,6 +129,7 @@ def array_analysis():
     nan, inf should assign to float datatype
     2. mean,max,min
     3. uniques
+    4. apply along axis
     """
     print("---array analysis")
     l2d = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
@@ -151,6 +152,16 @@ def array_analysis():
     uniqs, counts = np.unique(arr_rand, return_counts=True)
     print("Unique items : ", uniqs)
     print("Counts       : ", counts)
+
+    # apply along axis
+    arr_x = np.random.randint(1, 10, size=[4, 10])
+    print("arr_x:", arr_x)
+    print('Row wise: ', np.apply_along_axis(max_minus_min, 1, arr=arr_x))
+    print('Column wise: ', np.apply_along_axis(max_minus_min, 0, arr=arr_x))
+
+
+def max_minus_min(x):
+    return np.max(x) - np.min(x)
 
 
 if __name__ == '__main__':
