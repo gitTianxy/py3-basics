@@ -6,6 +6,17 @@ I. numpy-array vs python list
 2. Once an array is created, you cannot change its size. You will have to create a new array or overwrite the existing one.
 3. Every array has one and only one dtype. All items in it should be of that dtype.
 4. An equivalent numpy array occupies much less space than a python list of lists.
+
+II. save and load `numpy objects`
+---
+1. Save single numpy array object as .npy file
+    np.save('myarray.npy', arr2d)
+    s = np.load('myarray.npy')
+2. Save multiple numpy arrays as a .npz file
+    np.savez('array.npz', arr2d_f, arr2d_b)
+    b = np.load('array.npz')
+
+III. vectorize - Make a scalar function work on vectors
 """
 import numpy as np
 
@@ -113,11 +124,11 @@ def array_elements():
     Additionally, numpy arrays support boolean indexing--extract elements by boolean index
     """
     print("---operations on array elements")
-    l2d = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-    arr2d = np.array(l2d)
+    arr2d = np.arange(20).reshape(4, 5)
     print("array:", arr2d)
     print(f"element at position ({1},{1}): {arr2d[1,1]}")
-    print(f"elements at postion [:{2},:{2}]: {arr2d[:2, :2]}")
+    print(f"elements at range [:{2},:{2}]: {arr2d[:2, :2]}")
+    print(f"elements at range [:,:{2}] step by 2: {arr2d[::2,::2]}")
     print("reverse row positions:", arr2d[::-1, ])
     arr2db = arr2d > 5
     print(f"elements greater than 5:", arr2d[arr2db])
@@ -165,8 +176,8 @@ def max_minus_min(x):
 
 
 if __name__ == '__main__':
-    print_version()
-    array_operate()
-    array_prop()
+    # print_version()
+    # array_operate()
+    # array_prop()
     array_elements()
-    array_analysis()
+    # array_analysis()
