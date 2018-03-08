@@ -55,8 +55,8 @@ def insert_biztype(tb_seq, fid, biztype):
         conn = MyDbUtils.get_connect(DBConfig.local_config)
         cur = conn.cursor()
         cur.execute(sql)
-    except Exception, e:
-        print e
+    except Exception as e:
+        print(e)
     else:
         conn.commit()
     finally:
@@ -78,13 +78,13 @@ def alter_tbl(db):
             count = cur.fetchone()[0];
             if count == 0:
                 sql2 = alter_tbl_sql % (db, tbl_seq)
-                print '---alter_tbl_sql: ', sql2
+                print('---alter_tbl_sql: ', sql2)
                 cur = conn.cursor()
                 cur.execute(sql2)
             else:
-                print 'biztype EXISTS in fromcp_%s' % tbl_seq
-        except Exception, e:
-            print e
+                print('biztype EXISTS in fromcp_%s' % tbl_seq)
+        except Exception as e:
+            print(e)
         else:
             conn.commit()
         finally:
