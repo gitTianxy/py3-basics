@@ -28,7 +28,7 @@ def initDB():
 
 try:
     initDB()
-    print 'connection success'
+    print('connection success')
     cursor = ppc_con.cursor()
     i = 1
     fids = [5542145, 5542657, 5542401, 5543169]
@@ -40,14 +40,14 @@ try:
     params.extend(fids)
     cursor.execute(pst, params)
     for fid, evalue in cursor:
-        print 'fid=%s, evalue=%s' % (fid, evalue)
+        print('fid=%s, evalue=%s' % (fid, evalue))
 
-    print '-----------------------------'
+    print('-----------------------------')
     # cursor.execute(sql_tmpl, (i, date_begin))
     cursor.execute(pst, params)
     results = cursor.fetchall()
     for item in results:
-        print 'fid=%s, evalue=%s' % (item[0], item[1])
+        print('fid=%s, evalue=%s' % (item[0], item[1]))
 
 except mysql.connector.Error as e:
     print('connect fails!{}'.format(e))
