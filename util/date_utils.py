@@ -4,7 +4,7 @@ __title__ date-util
 __author__ Kevin Tian
 __date__ 2017.7
 """
-import datetime, time, calendar
+import datetime, calendar
 
 
 class DateUtils:
@@ -55,7 +55,7 @@ class DateUtils:
         if not isinstance(date_time, datetime.datetime):
             print('input type: ', type(date_time))
             raise ValueError("please input datetime")
-        return time.mktime(date_time.timetuple())
+        return date_time.timestamp()
 
     @staticmethod
     def ts2dt(time_in_seconds):
@@ -86,11 +86,8 @@ class DateUtils:
         if not isinstance(input_time, datetime.datetime):
             print('input type: ', type(input_time))
             raise ValueError("please input datetime")
-        current_ts = time.mktime(input_time.timetuple())
-        start_ts = current_ts - input_time.hour * 3600 - input_time.minute * 60 - input_time.second
-        end_ts = current_ts + (23 - input_time.hour) * 3600 + (59 - input_time.minute) * 60 + (60 - input_time.second)
-        day_start = datetime.datetime.fromtimestamp(start_ts)
-        day_end = datetime.datetime.fromtimestamp(end_ts)
+        day_start = datetime.datetime(input_time.year, input_time.month, input_time.day)
+        day_end = datetime.datetime(input_time.year, input_time.month, input_time.day + 1)
         return TimeRange(start_time=day_start, end_time=day_end)
 
     @staticmethod
@@ -100,8 +97,8 @@ class DateUtils:
             raise ValueError("please input datetime")
         input_day = DateUtils.get_day(input_time)
         week_day = input_time.weekday()
-        week_start_ts = time.mktime(input_day.get_start_time().timetuple()) - week_day * 24 * 3600
-        week_end_ts = time.mktime(input_day.get_end_time().timetuple()) + (6 - week_day) * 24 * 3600
+        week_start_ts = input_day.get_start_time().timestamp() - week_day * 24 * 3600
+        week_end_ts = input_day.get_end_time().timestamp() + (6 - week_day) * 24 * 3600
         week_start = datetime.datetime.fromtimestamp(week_start_ts)
         week_end = datetime.datetime.fromtimestamp(week_end_ts)
         return TimeRange(start_time=week_start, end_time=week_end)
@@ -113,8 +110,8 @@ class DateUtils:
             raise ValueError("please input datetime")
         input_day = DateUtils.get_day(input_time)
         month_range = calendar.monthrange(input_time.year, input_time.month)[1]
-        month_start_ts = time.mktime(input_day.get_start_time().timetuple()) - (input_time.day - 1) * 24 * 3600
-        month_end_ts = time.mktime(input_day.get_end_time().timetuple()) + (month_range - input_time.day) * 24 * 3600
+        month_start_ts = input_day.get_start_time().timestamp() - (input_time.day - 1) * 24 * 3600
+        month_end_ts = input_day.get_end_time().timestamp() + (month_range - input_time.day) * 24 * 3600
         month_start = datetime.datetime.fromtimestamp(month_start_ts)
         month_end = datetime.datetime.fromtimestamp(month_end_ts)
         return TimeRange(start_time=month_start, end_time=month_end)

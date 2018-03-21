@@ -70,3 +70,9 @@ kpop = 'k5'
 print("dict BEFORE pop key '%s': %s" % (kpop, dict4pop))
 dict4pop.pop(kpop)
 print("dict popped key '%s': %s" % (kpop, dict4pop))
+
+# bulk-generation of dict
+print("---generate dict")
+bulk_d = {f"k{i}": i for i in range(10)}
+for k in bulk_d:
+    print(f"{k}:{bulk_d[k]}")

@@ -4,6 +4,7 @@ OUTLINE:
 1. basic string operations
 2. number format
 2b. string format
+2c. struct demo
 3. regular expression
 4. string encoding(for python 2.x)
 """
@@ -37,8 +38,19 @@ print("join %s by ',': %s" % (range(0, 5), ','.join([str(i) for i in range(0, 5)
 # ================================================================================================
 """
 II. number format
+---
+struct API: 实现数字和bytes之间的相互转换
+1. struct.pack(fmt, v1, v2, ...): 按照给定的格式(fmt)，把数据封装成字符串(实际上是类似于c结构体的字节流)
+2. struct.unpack(fmt, string): 按照给定的格式(fmt)解析字节流string，返回解析出来的tuple
+3. struct.calcsize(fmt): 计算给定的格式(fmt)占用多少字节的内存
+`fmt` symbols:
+    - i: integer
+    - f/d: float/double
+    - s: string
+    - ?: bool
 """
 import math
+import struct
 
 # 小数位数控制
 print('e(3f)={:.3f}, e(6f)={:.6f}'.format(math.e, math.e))
@@ -52,6 +64,16 @@ fstr1 = f"{in_a}, {in_b}!"
 fstr2 = "{0}, {1}!".format(in_a, in_b)
 print("format 1:", fstr1)
 print("format 2:", fstr2)
+
+# struct demo
+f = 0.5
+i = 1
+
+b = struct.pack('fi', f, i)
+print(f"convert '{f}','{i}' to bytes: {b}")
+
+res, res2 = struct.unpack('fi', b)
+print(f"parse '{b}' to num: ({res},{res2})")
 
 # ================================================================================================
 """
@@ -106,6 +128,10 @@ IV. string encoding(for python 3.x)
 2. bytes vs bytearray
 - bytes是不可变的，同str;
 - bytearray是可变的，同list。
+
+3. chardet
+- 用chardet检测编码，使用简单。获取到编码后，再转换为str，就可以方便后续处理。
+- chardet支持检测中文、日文、韩文等多种语言。
 """
 import sys
 
@@ -130,5 +156,16 @@ print("byte size of '%s': %s" % ("你好", len(bytearray("你好", 'utf-8'))))
 # bytes vs bytearray
 print("bytes(%s) 2 bytearray:%s" % (bytes(s, 'utf8'), bytearray(bytes(s, 'utf8'))))
 print("bytearray(%s) 2 bytes:%s" % (bytearray(s, 'utf8'), bytes(bytearray(s, 'utf8'))))
+
+# encoding detect: chardet
+import chardet
+cdres = chardet.detect(b'Hello, world!')
+print(cdres)
+cdres = chardet.detect('Hello, world!'.encode('utf8'))
+print(cdres)
+cdres = chardet.detect('你好!'.encode('gbk'))
+print(cdres)
+cdres = chardet.detect('你好!'.encode('utf8'))
+print(cdres)
 
 # ================================================================================================

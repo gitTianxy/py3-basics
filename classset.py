@@ -3,7 +3,7 @@ class Cls1:
         self.title = title
 
     def display(self):
-        print "This is the ", self.title
+        print("This is the ", self.title)
 
 
 class Cls2:
@@ -12,4 +12,4 @@ class Cls2:
 
     @staticmethod
     def display():
-        print "This is class 2"
+        print("This is class 2")

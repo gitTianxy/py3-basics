@@ -29,11 +29,11 @@ def download_job():
     # We can use a with statement to ensure threads are cleaned up promptly
     with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
         # Start the load operations and mark each future with its URL
-        future_to_url = {executor.submit(load_url, url, 60): url for url in urls}
-        for future in concurrent.futures.as_completed(future_to_url):
-            url = future_to_url[future]
+        future_dict = {executor.submit(load_url, url, 60): url for url in urls}
+        for f_k in concurrent.futures.as_completed(future_dict):
+            url = future_dict[f_k]
             try:
-                data = future.result()
+                data = f_k.result()
             except Exception as exc:
                 print('%r generated an exception: %s' % (url, exc))
             else:

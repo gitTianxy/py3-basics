@@ -27,7 +27,7 @@ def tsk_a(idx):
     if random.random()*100 > 99:
         raise RuntimeError("err happens in 'task A'. round:%s, index:%s" % (rd, idx))
     mutex.acquire()
-    print "do 'task A'. round:%s, index:%s" % (rd, idx)
+    print("do 'task A'. round:%s, index:%s" % (rd, idx))
     mutex.release()
     sleep(10)
 
@@ -38,7 +38,7 @@ def tsk_b(idx):
     if random.random() > 0.6:
         raise RuntimeError("err happens in 'task B'. round:%s, index:%s" % (rd, idx))
     mutex.acquire()
-    print "do 'task B'. round:%s, index:%s" % (rd, idx)
+    print("do 'task B'. round:%s, index:%s" % (rd, idx))
     mutex.release()
     sleep(2)
 
@@ -52,27 +52,27 @@ if __name__ == '__main__':
     while True:
         try:
             mutex.acquire()
-            print "---NEW round start. round:", rd
+            print("---NEW round start. round:", rd)
             mutex.release()
             pl.map(tsk_a, range(0, 50))
             pl.map(tsk_b, range(0, 20))
-        except Exception, ex:
+        except Exception as ex:
             err_num += 1
             mutex.acquire()
-            print "error:%s, error num:%s" % (ex, err_num)
+            print("error:%s, error num:%s" % (ex, err_num))
             mutex.release()
             pl.close()
             pl.join()
             pl = ThreadPool(thr_num)
         finally:
             mutex.acquire()
-            print "round %s FINISH." % rd
+            print("round %s FINISH." % rd)
             mutex.release()
             rd += 1
 
         if err_num > 5:
             mutex.acquire()
-            print 'err happened %s times. slp 10secs...' % err_num
+            print('err happened %s times. slp 10secs...' % err_num)
             sleep(10)
             err_num = 0
             mutex.release()

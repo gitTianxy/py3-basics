@@ -1,10 +1,23 @@
 # encoding=utf-8
 """
+read file demos:
+1. load json
+2. read excel
+3. read csv
+4. read as a whole, by lines, by line, by chunk
+---
 TIPs:
 1.关于python文件的close:
     A. 通过file对象的close方法关闭文件只是给该对象设置了一个状态位, 而该文件对象依然存在，但是我们无法再通过它来读取文件内容了。
 因此在python中根本没有必要显式的去close()一个文件对象。
     B. 如果要在文件使用完毕关闭文件，可以用'with open(path) as file'的形式打开文件，因为file的exit方法中包含了其close操作。
+2. 磁盘r/w
+在磁盘上读写文件的功能都是由操作系统提供的，现代操作系统不允许普通的程序直接操作磁盘.
+所以，读写文件就是请求操作系统打开一个文件对象（通常称为文件描述符），
+然后，通过操作系统提供的接口从这个文件对象中读取数据（读文件），或者把数据写入这个文件对象（写文件）。
+3. 读文件方式: as a whole, by lines, by line, by chunk
+4. 文件类型: 文本文件(不同编码'utf8-default','gbk',...), 二进制文件
+    要读取非UTF-8编码的文本文件，需要给open()函数传入encoding参数
 """
 import json
 import xlrd
@@ -109,5 +122,5 @@ if __name__ == '__main__':
     for chk in read_chunks(root + "pgc-cid.txt", size=64):
         if c > 10:
             break
-        print("chunk %s: %s" % (c, chk))
+        print("chunk %s:\n %s" % (c, chk))
         c += 1

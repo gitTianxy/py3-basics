@@ -1,6 +1,11 @@
 # coding=utf-8
 """
 threadpool module demo
+---
+1. threadpool.ThreadPool
+2. threadpool.makeRequests
+3. pool.putRequest(req)
+4. pool.wait()
 """
 from time import sleep
 import threading
@@ -18,25 +23,25 @@ class MyThread(threading.Thread):
 
     def run(self):
         mutex.acquire()
-        print 'START ', self.operation
+        print('START ', self.operation)
         mutex.release()
         start = datetime.now()
         while True:
             if (datetime.now() - start).seconds > self.dur:
                 return self.operation
             mutex.acquire()
-            print self.operation
+            print(self.operation)
             mutex.release()
             sleep(1)
 
     @staticmethod
     def cb_func(request, name):
         mutex.acquire()
-        print MyThread.__inner_prop
+        print(MyThread.__inner_prop)
         if request.exception:
-            print '%s is Failed!!!' % name
+            print('%s is Failed!!!' % name)
         else:
-            print '%s is FINISH!!!' % name
+            print('%s is FINISH!!!' % name)
         mutex.release()
 
 
@@ -46,7 +51,7 @@ def do_work(name, dur):
         if (datetime.now() - start).seconds > dur:
             return name
         mutex.acquire()
-        print 'do ', name
+        print('do ', name)
         mutex.release()
         sleep(1)
 
@@ -54,15 +59,15 @@ def do_work(name, dur):
 def callback_fn(request, name):
     mutex.acquire()
     if request.exception:
-        print '%s is Failed!!!' % name
+        print('%s is Failed!!!' % name)
     else:
-        print '%s is FINISH!!!' % name
+        print('%s is FINISH!!!' % name)
     mutex.release()
 
 
 def call_method_demo():
-    print '------------- use method ----------------'
-    works = [(None, {'name': 'listen music', 'dur': 5}), (None, {'name': 'watch TV', 'dur': 10})]
+    print('------------- call method demo ----------------')
+    works = [(None, {'name': 'listen music', 'dur': 5}), (None, {'name': 'watch TV', 'dur': 3})]
     pool = threadpool.ThreadPool(5)
     requests = threadpool.makeRequests(do_work, works, callback_fn)
     for req in requests:
@@ -71,9 +76,9 @@ def call_method_demo():
 
 
 def call_class_demo():
-    print '-------------- use Class ----------------'
+    print('-------------- call class-method demo ----------------')
     thread1 = MyThread('listen music', 5)
-    thread2 = MyThread('watch TV', 10)
+    thread2 = MyThread('watch TV', 3)
     para = [thread1, thread2]
     pool = threadpool.ThreadPool(2)
     requests = threadpool.makeRequests(MyThread.run, para, MyThread.cb_func)
@@ -84,10 +89,5 @@ def call_class_demo():
 
 mutex = threading.Lock()
 if __name__ == '__main__':
-    print 'main thread START'
-    #
-    # call_method_demo()
-    #
+    call_method_demo()
     call_class_demo()
-    #
-    print 'main thread FINISH'

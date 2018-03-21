@@ -10,8 +10,8 @@ class RedisConnector:
         pass
 
     @staticmethod
-    def get_conn(host, port):
-        return redis.Redis(host=host, port=port)
+    def get_conn(host, port, passwd=None):
+        return redis.Redis(host=host, port=port, password=passwd)
 
 
 if __name__ == "__main__":
@@ -19,4 +19,4 @@ if __name__ == "__main__":
     pipe = conn.pipeline()
     pipe.hget("htian", "age")
     result = pipe.execute()
-    print result
+    print(result)

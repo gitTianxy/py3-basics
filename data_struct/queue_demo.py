@@ -14,7 +14,7 @@ I. 一个生产者和一个消费者的情形
 II. 多个生产者和消费者的情形
 如上所诉, 需要调配好生产速度和消费速度, 从而使进程高效推进
 """
-import Queue
+import queue
 import threading
 from time import sleep
 
@@ -35,10 +35,10 @@ class Consumer(threading.Thread):
                     break
             ele = q.get()
             mutex.acquire()
-            print self.name, ' take: ', ele
+            print(self.name, ' take: ', ele)
             mutex.release()
             sleep(self.slp_sec)
-        print 'consume ALL'
+        print('consume ALL')
 
 
 class Producer(threading.Thread):
@@ -53,26 +53,26 @@ class Producer(threading.Thread):
         global mutex
         for i in range(0, self.count):
             mutex.acquire()
-            print self.name, ' give: ', i
+            print(self.name, ' give: ', i)
             mutex.release()
             q.put(i)
             sleep(0.5)
         finish_flag = True
-        print 'produce ALL'
+        print('produce ALL')
 
 
 def single_give_take():
-    producer = Producer('producer', 50)
+    producer = Producer('producer', 10)
     producer.start()
     consumer = Consumer('consumer', 2)
     consumer.start()
     producer.join()
     consumer.join()
-    print 'single_give_take FINISH'
+    print('single_give_take FINISH')
 
 
 def multi_give_take():
-    producer = Producer('producer', 50)
+    producer = Producer('producer', 20)
     producer.start()
     c1 = Consumer('consumer01', 2)
     c1.start()
@@ -81,11 +81,11 @@ def multi_give_take():
     producer.join()
     c1.join()
     c2.join()
-    print 'multi_give_take FINISH'
+    print('multi_give_take FINISH')
 
 
 finish_flag = False
-q = Queue.Queue(10)
+q = queue.Queue(10)
 mutex = threading.Lock()
 if __name__ == "__main__":
     single_give_take()
