@@ -9,3 +9,4 @@
 db/*.db
 /file/*.jpg
 /test/
+*.log
