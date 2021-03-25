@@ -54,7 +54,7 @@ python-xlib==0.21
 pytz==2017.3
 PyUserInput==0.1.11
 pywin32==221 # windows
-PyYAML==3.12
+PyYAML==5.4
 queuelib==1.4.2
 redis==2.10.6
 requests==2.18.4
