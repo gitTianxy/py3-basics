@@ -53,7 +53,7 @@ python-dateutil==2.6.1
 python-xlib==0.21
 pytz==2017.3
 PyUserInput==0.1.11
-pywin32==221 # windows
+pywin32==301 # windows
 PyYAML==3.12
 queuelib==1.4.2
 redis==2.10.6
